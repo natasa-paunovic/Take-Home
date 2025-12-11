@@ -41,6 +41,19 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/LICENSE-notice.md",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt"
+            )
+        }
+    }
 }
 
 dependencies {
@@ -70,7 +83,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.mockk)
+    androidTestImplementation("io.mockk:mockk-android:1.13.12")
     androidTestImplementation(libs.truth)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)

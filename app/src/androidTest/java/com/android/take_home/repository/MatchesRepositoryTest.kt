@@ -1,6 +1,6 @@
 package com.android.take_home.repository
 
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
+
 import com.android.take_home.data.local.FileCacheManager
 import com.android.take_home.data.remote.RetrofitApiService
 import com.android.take_home.data.repository.MatchesRepositoryImpl
@@ -43,54 +43,54 @@ class MatchesRepositoryTest {
     }
 
     @Test
-    fun `emits cached then remote data`() = runTest {
-        // keširani podaci
+    fun emits_cached_then_remote_data() = runTest {
+        // cached data
         val cached = listOf(sampleMatch)
-        // podaci sa API
+        // API data
         val remote = listOf(sampleMatch.copy(id = 2))
 
         val fakeCache = createTempFileCache(cached)
         val api = mockk<RetrofitApiService>()
 
-        // Mock API poziv
+        // Mock API call
         coEvery { api.getMatches() } returns remote
 
         val repo = MatchesRepositoryImpl(api, fakeCache)
 
-        // Skupljamo sve emitove Flow-a
+        // Collected all emits of Flow
         val emissions = repo.fetchMatches().toList()
 
-        // Prvi emit = keš
+        // First emit = cache
         assertThat(emissions[0]).isInstanceOf(Resource.Success::class.java)
         assertThat((emissions[0] as Resource.Success).data).isEqualTo(cached)
 
-        // Drugi emit = remote podaci
+        // Second emit = remote data
         assertThat(emissions[1]).isInstanceOf(Resource.Success::class.java)
         assertThat((emissions[1] as Resource.Success).data).isEqualTo(remote)
 
-        // Fake cache je ažuriran
+        // Fake cache updated
         val cacheContent = runBlocking { fakeCache.read() }
         assertThat(cacheContent).isEqualTo(remote)
     }
 
     @Test
-    fun `emits cached then error if remote fails`() = runTest {
+    fun emits_cached_then_error_if_remote_fails() = runTest {
         val cached = listOf(sampleMatch)
         val fakeCache = createTempFileCache(cached)
         val api = mockk<RetrofitApiService>()
 
-        // Simuliramo grešku sa API-ja
+        // simulate API error
         coEvery { api.getMatches() } throws RuntimeException("Internal Server Error")
 
         val repo = MatchesRepositoryImpl(api, fakeCache)
 
         val emissions = repo.fetchMatches().toList()
 
-        // Prvi emit = keš
+        // First emit = cache
         assertThat(emissions[0]).isInstanceOf(Resource.Success::class.java)
         assertThat((emissions[0] as Resource.Success).data).isEqualTo(cached)
 
-        // Drugi emit = error
+        // Second emit = error
         assertThat(emissions[1]).isInstanceOf(Resource.Error::class.java)
         assertThat((emissions[1] as Resource.Error).cached).isEqualTo(cached)
     }
