@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MatchResult(
-    val homeScore: Int,
-    val awayScore: Int
+    val home: Int,
+    val away: Int
 )

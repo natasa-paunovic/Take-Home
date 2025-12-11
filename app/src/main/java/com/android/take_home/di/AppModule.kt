@@ -4,5 +4,6 @@ import com.android.take_home.data.remote.networkModule
 
 val appModules = listOf(
     networkModule,
-    repositoryModule
+    repositoryModule,
+    viewModelModule
 )

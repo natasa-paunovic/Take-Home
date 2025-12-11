@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.coil.compose)
     implementation (libs.bundles.koin)
+    implementation(libs.androidx.material3)
+
+    implementation(libs.coil.svg)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

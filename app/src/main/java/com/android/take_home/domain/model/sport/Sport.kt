@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class Sport(
     val id: Int,
     val name: String,
-    val sportIconUrl: String
+    val sportIconUrl: String?
 )

@@ -13,7 +13,7 @@ abstract class LocalOfflineRepository<T>(
 
     fun asFlow(): Flow<Resource<List<T>>> = flow {
 
-        // (zero wait time)
+
         val cached = cache.read()
         if (cached != null) {
             emit(Resource.Success(cached))

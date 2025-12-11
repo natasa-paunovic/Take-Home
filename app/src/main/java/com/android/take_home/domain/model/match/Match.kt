@@ -16,3 +16,7 @@ data class Match(
     val sportId: Int,
     val competitionId: Int
 )
+{
+    val matchStatus: MatchStatus
+        get() = MatchStatus.fromString(status)
+}
